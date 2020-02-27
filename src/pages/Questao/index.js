@@ -26,29 +26,35 @@ export default class Questao extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            correta: false,
+            respostaCorreta: false,
             resposta: {},
+            descricaoResposta: null,
+            descricaoQuestao: null,
+            tituloQuestao: null,
             respostas: [],
             quantidadeResposta: 0,
         }
     }
 
-    handleCorreta = (event) => {
-        this.setState({
-            correta: event.target.checked
-        });
-    }
-
     adicionaResposta = (event) => {
-        const { respostas, resposta, correta, quantidadeResposta } = this.state;
+        event.preventDefault();
+        let { resposta, respostaCorreta, respostas, descricaoResposta, quantidadeResposta } = this.state;
+
         resposta = {
-            descricao: this.descricaoResposta.value,
-            correta: correta,
+            key: quantidadeResposta,
+            descricao: descricaoResposta,
+            respostaCorreta: respostaCorreta,
         }
 
-        respostas.append(resposta);
-
+        respostas.push(resposta);
         quantidadeResposta++;
+
+        this.setState({
+            respostas,
+            quantidadeResposta
+        });
+
+        console.log(respostas);
     }
 
     render() {
@@ -66,10 +72,17 @@ export default class Questao extends Component {
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <TextField id="titulo" fullWidth={true} label="Título" ref={(input) => this.titulo = input} />
+                            <TextField id="titulo" 
+                                       fullWidth={true} 
+                                       label="Título" 
+                                       value={this.state.tituloQuestao} />
                         </Grid>
                         <Grid item xs={8}>
-                            <TextField id="descricao-questao" fullWidth={true} label="Descrição" multiline={true} ref={(input) => this.descricaoQuestao = input} />
+                            <TextField id="descricao-questao" 
+                                       fullWidth={true} 
+                                       label="Descrição"                                       
+                                       multiline={true} 
+                                       value={this.state.descricaoQuestao} />
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h5">
@@ -81,22 +94,31 @@ export default class Questao extends Component {
                                 fullWidth={true}
                                 label="Descrição"
                                 multiline={true}
-                                ref={(input) => this.descricaoResposta = input} />
+                                onChange={(event) => {
+                                    this.setState({
+                                        descricaoResposta: event.target.value
+                                    });
+                                }}
+                                value={this.state.descricaoResposta} />
                         </Grid>
-                        <Grid item xs={2.5} style={{ paddingTop: 25, paddingLeft: 25 }}>
+                        <Grid item xs={2} style={{ paddingTop: 25, paddingLeft: 25 }}>
                             <FormControlLabel
                                 control={
-                                    <Switch checked={this.state.correta} onChange={this.handleCorreta} value={true} color="primary" />
+                                    <Switch checked={this.state.respostaCorreta} onChange={(event) => {
+                                        this.setState({
+                                            respostaCorreta: event.target.checked
+                                        });
+                                    }} value={true} color="primary" />
                                 }
                                 label="Correta"
                             />
                         </Grid>
                         <Grid item xs={4} style={{ paddingTop: 25 }}>
-                            <Button variant="contained" 
-                                    color="primary" 
-                                    endIcon={<AddIcon />} 
-                                    disabled={this.LIMITE_RESPOSTAS === this.state.quantidadeResposta}
-                                    onClick={this.adicionaResposta}>Adicionar</Button>
+                            <Button variant="contained"
+                                color="primary"
+                                endIcon={<AddIcon />}
+                                disabled={this.LIMITE_RESPOSTAS === this.state.quantidadeResposta}
+                                onClick={this.adicionaResposta}>Adicionar</Button>
                         </Grid>
                         <Grid item xs={12}>
                             <TableContainer component={Paper}>
@@ -110,17 +132,30 @@ export default class Questao extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.state.respostas.map(resposta => (                                           
-                                            <TableRow key={resposta}>
+                                        {this.state.respostas.map(resposta => (
+                                            <TableRow key={resposta.key}>
+                                                <TableCell>{resposta.key + 1}</TableCell>
                                                 <TableCell component="th" scope="row">
                                                     {resposta.descricao}
                                                 </TableCell>
-                                                <TableCell align="right">{resposta}</TableCell>
+                                                <TableCell>{resposta.respostaCorreta ? "Sim" : "Não"}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2} justify="flex-end" style={{marginTop: 50}}>
+                        <Grid item xs={1}>
+                            <Button variant="outlined"
+                                color="primary"
+                            >Voltar</Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Button variant="contained"
+                                color="primary"
+                            >Salvar</Button>
                         </Grid>
                     </Grid>
                 </Container>
