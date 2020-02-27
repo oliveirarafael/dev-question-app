@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Container } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,35 +8,48 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Header from '../../components/Header';
 
 export default class Principal extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            simulados: [],
+        }
+    }
+
+    novo = () => {
+        this.props.history.push("/questao");
+    }
 
     render() {
         return (
             <div>
-                <AppBar position="static" style={{marginBottom: 80}}>
-                    <Toolbar>
-                        <Typography variant="h6">
-                            Simulado APP
-                        </Typography>
-                        <Button color="inherit">Logout</Button>
-                    </Toolbar>
-                </AppBar>
+                <Header />
                 <Container>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Titulo</TableCell>
-                                    <TableCell>Descrição</TableCell>
-                                    <TableCell align="right">Opções</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="primary" onClick={this.novo}>Novo</Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TableContainer component={Paper}>
+                                <Table aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>#</TableCell>
+                                            <TableCell>Título</TableCell>
+                                            <TableCell align="right">Opções</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
                 </Container>
             </div>
         );

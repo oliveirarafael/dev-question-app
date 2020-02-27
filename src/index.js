@@ -5,6 +5,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Login from './pages/Login';
 import Principal from './pages/Principal';
+import Questao from './pages/Questao';
 
 
 ReactDOM.render(
@@ -12,8 +13,9 @@ ReactDOM.render(
         <Switch>
             <Route path="/" exact={true} component={Login} />
             <Route path="/principal" component={Principal} />
+            <Route path="/questao" component={Questao} />
         </Switch>
-    </ BrowserRouter>
+    </BrowserRouter>
 , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
