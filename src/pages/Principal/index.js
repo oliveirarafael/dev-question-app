@@ -10,8 +10,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/Header';
+import { withRouter } from 'react-router-dom';
 
-export default class Principal extends Component {
+class Principal extends Component {
 
     constructor(props){
         super(props);
@@ -55,3 +56,5 @@ export default class Principal extends Component {
         );
     }
 }
+
+export default withRouter(Principal);
