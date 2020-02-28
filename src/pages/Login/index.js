@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import queryString from 'query-string';
+import Api from '../../services/Api';
+import './styles.css';
 
 export default class Login extends Component {
 
@@ -39,8 +41,8 @@ export default class Login extends Component {
         fetch('http://localhost:8080/api/v1/auth', requestInfo).
             then(response => {
                 if (response.ok) {
-                    response.json().then(result => { 
-                        localStorage.setItem("token", result.token) 
+                    response.json().then(result => {
+                        localStorage.setItem("token", result.token)
                         this.props.history.push("/principal");
                     });
                 } else {
@@ -65,38 +67,43 @@ export default class Login extends Component {
 
     render() {
         return (
-            <Container>
+            <div className="fundo">
+                <div>
+                    <div className="esquerdo">
+                       
+                    </div>
+                    <div className="direito">
+                        <Grid container
+                            direction="column"
+                            alignContent="center"
+                            spacing={2}>
 
-                <Grid container
-                    direction="column"
-                    alignContent="center"
-                    spacing={2}
-                    style={{ marginTop: 150 }}>
-
-                    <Grid item xs={12}>
-                        {this.alert()}
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h4">
-                            Login
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="email"
-                            label="E-mail"
-                            onChange={(event) => this.state.email = event.target.value} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="senha"
-                            type="password"
-                            label="Senha"
-                            onChange={(event) => this.state.senha = event.target.value} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button variant="contained" color="primary" onClick={this.login}>Entrar</Button>
-                    </Grid>
-                </Grid>
-            </Container>
+                            <Grid item xs={12}>
+                                {this.alert()}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="h4">
+                                    Login
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField id="email"
+                                    label="E-mail"
+                                    onChange={(event) => this.state.email = event.target.value} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField id="senha"
+                                    type="password"
+                                    label="Senha"
+                                    onChange={(event) => this.state.senha = event.target.value} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button variant="contained" color="primary" onClick={this.login}>Entrar</Button>
+                            </Grid>
+                        </Grid>
+                    </div>
+                </div>
+            </div>
         );
     }
 }
