@@ -20,7 +20,7 @@
 .fundo>div>.esquerdo{
     display: inline-block;
     border-radius: 20px 0 0 20px;
-    background-image: url("../../assets/images/login/1988006.svg");
+    background-image: url("../../assets/images/login/login.svg");
     height: 450px;
     width: 545px;
  }
@@ -29,8 +29,8 @@
    display: inline-block;
    background-color: #fff;
    border-radius: 0px 20px 20px 0;
-   padding-left: 100px;
-   padding-right: 100px;
+   padding-left: 80px;
+   padding-right: 80px;
    height: 450px;
    float: right;
 }

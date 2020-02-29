@@ -77,10 +77,10 @@ export default class Login extends Component {
                             direction="column"
                             alignContent="center"
                             spacing={2}>
-
                             <Grid item xs={12}>
-                                {this.alert()}
+
                             </Grid>
+                            
                             <Grid item xs={12}>
                                 <Typography variant="h4">
                                     Login
@@ -99,6 +99,9 @@ export default class Login extends Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <Button variant="contained" color="primary" onClick={this.login}>Entrar</Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                {this.alert()}
                             </Grid>
                         </Grid>
                     </div>

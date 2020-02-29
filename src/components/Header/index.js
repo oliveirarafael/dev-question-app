@@ -20,7 +20,7 @@ class Header extends Component {
         return (
             <AppBar position="static" style={{ marginBottom: 80 }}>
                 <Toolbar>
-                    <Typography variant="h6">Quest Developer</Typography>
+                    <Typography variant="h6">DEV QUESTION</Typography>
                     <Button color="inherit" startIcon={<ExitToAppIcon />} onClick={this.sair}>Sair</Button>
                 </Toolbar>
             </AppBar>
