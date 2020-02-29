@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from '@material-ui/core';
+import { Container, IconButton } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,19 +11,46 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/Header';
 import { withRouter } from 'react-router-dom';
+import Api from '../../services/Api';
+import UpdateIcon from '@material-ui/icons/Update';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class Principal extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            simulados: [],
+            questoes: [],
         }
     }
 
     novo = () => {
         this.props.history.push("/questao");
     }
+
+    componentDidMount() {
+        this.carregar();
+    }
+
+    carregar = () => {
+        Api.questoes().then(response => {
+            if (response.ok) {
+                response.json().then(json => {
+                    console.log(json.content)
+                    this.setState({
+                        questoes: json.content,
+                    })
+                })
+            }
+        })
+    }
+
+    excluir = (uuid) => {
+        Api.deletarQuestao(uuid).then(response => {
+           console.log(response); 
+        }).catch(erro => console.error)
+    }
+
 
     render() {
         return (
@@ -45,7 +72,22 @@ class Principal extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-
+                                        {this.state.questoes.map((questao, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    {questao.titulo}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton aria-label="update">
+                                                        <UpdateIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton aria-label="delete">
+                                                        <DeleteIcon fontSize="small" onClick={() => this.excluir(questao.uuid)}/>
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>

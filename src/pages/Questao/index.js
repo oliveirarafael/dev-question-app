@@ -20,12 +20,10 @@ import {
 
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-import Navegacao from "../../components/Navegacao";
 import { withRouter } from "react-router-dom";
-
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import Api from "../../services/Api";
 
 class Questao extends Component {
     LIMITE_RESPOSTAS = 4;
@@ -64,9 +62,8 @@ class Questao extends Component {
         this.respostaCorretaAdicionada(respostaCorreta);
 
         resposta = {
-            key: quantidadeResposta,
             descricao: descricaoResposta,
-            respostaCorreta: respostaCorreta,
+            correta: respostaCorreta,
         }
 
         respostas.push(resposta);
@@ -131,6 +128,12 @@ class Questao extends Component {
                 alertas: [],
             })
 
+            Api.cadastrarQuestao(tituloQuestao, descricaoQuestao, respostas).then(response => {
+                if(response.status === 201){
+                    this.voltar();
+                }
+            }).catch(erro => console.error)
+
         } else {
             this.alertaValidacao();
             this.limparMensagensValidacao();
@@ -158,9 +161,9 @@ class Questao extends Component {
             mensagensValidacao.push('Precisa incluir no minimo 2 respostas');
         }
 
-        let respostaCorretaEncontrada = respostas.filter(r => {return r.respostaCorreta === true})
+        let respostaCorretaEncontrada = respostas.filter(r => { return r.correta === true })
 
-        if(respostaCorretaEncontrada.length === 0){
+        if (respostaCorretaEncontrada.length === 0) {
             mensagensValidacao.push('Precisa incluir no minimo 1 resposta correta');
         }
 
@@ -208,9 +211,6 @@ class Questao extends Component {
                             }
                         </Grid>
                         <Grid item xs={12}>
-                            <Navegacao />
-                        </Grid>
-                        <Grid item xs={12}>
                             <Typography variant="h5">
                                 Questão
                             </Typography>
@@ -241,6 +241,7 @@ class Questao extends Component {
                                 }} />
                         </Grid>
                         <Grid item xs={12}>
+                        
                             <Typography variant="h5">
                                 Respostas
                             </Typography>
@@ -295,7 +296,7 @@ class Questao extends Component {
                                                     {resposta.descricao}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {resposta.respostaCorreta ? "Sim" : "Não"}
+                                                    {resposta.correta ? "Sim" : "Não"}
                                                 </TableCell>
                                                 <TableCell align="right">
                                                     <IconButton aria-label="delete" onClick={() => this.excluirResposta(index)}>

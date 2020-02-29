@@ -30,28 +30,19 @@ export default class Login extends Component {
             return;
         }
 
-        const requestInfo = {
-            method: 'POST',
-            body: JSON.stringify({ email: email, senha: senha }),
-            headers: new Headers({
-                'Content-type': 'application/json',
-            })
-        };
-
-        fetch('http://localhost:8080/api/v1/auth', requestInfo).
-            then(response => {
-                if (response.ok) {
-                    response.json().then(result => {
-                        localStorage.setItem("token", result.token)
-                        this.props.history.push("/principal");
-                    });
-                } else {
-                    response.json().then(result => {
-                        this.setState({ mensagem: result.mensagem })
-                    })
-                }
-            }).
-            catch(erro => console.error(erro))
+        Api.login(email, senha).then(response => {
+            if (response.ok) {
+                response.json().then(result => {
+                    localStorage.setItem("token", result.token)
+                    this.props.history.push("/principal");
+                });
+            } else {
+                response.json().then(result => {
+                    this.setState({ mensagem: result.mensagem })
+                })
+            }
+        }).
+        catch(erro => console.error(erro))
     }
 
     alert = () => {
