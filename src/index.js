@@ -39,6 +39,16 @@ ReactDOM.render(
                     )
             )} />
 
+            <Route path="/questao/:uuid" render={() => (
+                autenticado() ?
+                    (
+                        login()
+                    ) :
+                    (
+                        <Questao />
+                    )
+            )} />
+
             <Route path="/logout" component={Logout} />
         </Switch>
     </BrowserRouter>

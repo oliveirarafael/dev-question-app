@@ -17,16 +17,22 @@ const Api = {
         return endpoint('auth', requestInfo);
     },
 
-    questoes: () => {
+    questoes: (uuid = '') => {
         const requestInfo = {
             method: 'GET',
             headers: new Headers({
-                'Content-type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             })
         };
-        return endpoint('questoes', requestInfo);
+
+        if(uuid === null || uuid === ''){
+           return endpoint('questoes', requestInfo);
+        }else{
+           return endpoint(`questoes/${uuid}`, requestInfo);
+        }
     },
+
+
 
     cadastrarQuestao: (titulo, descricao, respostas) => {
         const requestInfo = {

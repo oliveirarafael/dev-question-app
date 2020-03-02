@@ -36,7 +36,6 @@ class Principal extends Component {
         Api.questoes().then(response => {
             if (response.ok) {
                 response.json().then(json => {
-                    console.log(json.content)
                     this.setState({
                         questoes: json.content,
                     })
@@ -45,9 +44,13 @@ class Principal extends Component {
         })
     }
 
+    atualizar = (uuid) => {
+        this.props.history.push(`/questao/${uuid}`)
+    }
+
     excluir = (uuid) => {
         Api.deletarQuestao(uuid).then(response => {
-           console.log(response); 
+           this.carregar();
         }).catch(erro => console.error)
     }
 
@@ -80,10 +83,12 @@ class Principal extends Component {
                                                 </TableCell>
                                                 <TableCell align="right">
                                                     <IconButton aria-label="update">
-                                                        <UpdateIcon fontSize="small" />
+                                                        <UpdateIcon fontSize="small" onClick={() => this.atualizar(questao.uuid)}/>
                                                     </IconButton>
                                                     <IconButton aria-label="delete">
-                                                        <DeleteIcon fontSize="small" onClick={() => this.excluir(questao.uuid)}/>
+                                                        <DeleteIcon 
+                                                           fontSize="small" 
+                                                           onClick={() => this.excluir(questao.uuid)}/>
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>

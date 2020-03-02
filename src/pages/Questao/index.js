@@ -21,6 +21,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withRouter } from "react-router-dom";
+import { useParams } from "react-router";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Api from "../../services/Api";
@@ -44,7 +45,12 @@ class Questao extends Component {
             open: false,
             mensagensValidacao: [],
             alertas: [],
+            uuid: null,
         }
+    }
+
+    componentDidMount() {
+        this.carrega();
     }
 
     adicionaResposta = (event) => {
@@ -78,6 +84,26 @@ class Questao extends Component {
 
     }
 
+    carrega = () => {
+        const url = this.props.history.location.pathname
+        const fatia = url.split("/")
+
+        if (fatia.length > 1) {
+            Api.questoes(fatia[2]).then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log(json)
+                        this.setState({
+                            uuid: json.uuid,
+                            tituloQuestao: json.titulo,
+                            descricaoQuestao: json.descricao,
+                        })
+                    })
+                }
+            });
+        }
+    }
+
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -109,7 +135,6 @@ class Questao extends Component {
 
     excluirResposta = (index) => {
         let { quantidadeResposta, respostas } = this.state;
-
         quantidadeResposta--;
 
         this.setState({
@@ -129,7 +154,7 @@ class Questao extends Component {
             })
 
             Api.cadastrarQuestao(tituloQuestao, descricaoQuestao, respostas).then(response => {
-                if(response.status === 201){
+                if (response.status === 201) {
                     this.voltar();
                 }
             }).catch(erro => console.error)
@@ -241,7 +266,7 @@ class Questao extends Component {
                                 }} />
                         </Grid>
                         <Grid item xs={12}>
-                        
+
                             <Typography variant="h5">
                                 Respostas
                             </Typography>
