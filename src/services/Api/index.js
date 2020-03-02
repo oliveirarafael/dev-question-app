@@ -46,6 +46,19 @@ const Api = {
         return endpoint('questoes', requestInfo);
     },
 
+    atualizarQuestao: (uuid, titulo, descricao, respostas) => {
+        const requestInfo = {
+            method: 'PUT',
+            body: JSON.stringify({ uuid, titulo, descricao, respostas }),
+
+            headers: new Headers({
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            })
+        };
+        return endpoint(`questoes/${uuid}`, requestInfo);
+    },
+
     deletarQuestao: (uuid) => {
         const requestInfo = {
             method: 'DELETE',
@@ -55,6 +68,17 @@ const Api = {
             })
         };
         return endpoint(`questoes/${uuid}`, requestInfo);
+    },
+
+    deletarResposta: (uuid) => {
+        const requestInfo = {
+            method: 'DELETE',
+           
+            headers: new Headers({
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            })
+        };
+        return endpoint(`respostas/${uuid}`, requestInfo);
     }
 }
 

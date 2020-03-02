@@ -87,16 +87,17 @@ class Questao extends Component {
     carrega = () => {
         const url = this.props.history.location.pathname
         const fatia = url.split("/")
-
-        if (fatia.length > 1) {
+ 
+        if (fatia.length > 2) {
             Api.questoes(fatia[2]).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        console.log(json)
                         this.setState({
                             uuid: json.uuid,
                             tituloQuestao: json.titulo,
                             descricaoQuestao: json.descricao,
+                            respostas: json.respostas,
+                            quantidadeResposta: json.respostas.length,
                         })
                     })
                 }
@@ -133,8 +134,12 @@ class Questao extends Component {
         this.props.history.push('/principal')
     }
 
-    excluirResposta = (index) => {
-        let { quantidadeResposta, respostas } = this.state;
+    excluirResposta = (index, uuid = null) => {
+        let {quantidadeResposta, respostas } = this.state;
+
+        if(uuid !== null){
+           Api.deletarResposta(uuid);
+        }
         quantidadeResposta--;
 
         this.setState({
@@ -155,6 +160,26 @@ class Questao extends Component {
 
             Api.cadastrarQuestao(tituloQuestao, descricaoQuestao, respostas).then(response => {
                 if (response.status === 201) {
+                    this.voltar();
+                }
+            }).catch(erro => console.error)
+
+        } else {
+            this.alertaValidacao();
+            this.limparMensagensValidacao();
+        }
+    }
+
+    atualizar = () => {
+        const { uuid, tituloQuestao, descricaoQuestao, respostas } = this.state;
+
+        if (this.questaoValida(tituloQuestao, descricaoQuestao, respostas)) {
+            this.setState({
+                alertas: [],
+            })
+
+            Api.atualizarQuestao(uuid, tituloQuestao, descricaoQuestao, respostas).then(response => {
+                if (response.status === 200) {
                     this.voltar();
                 }
             }).catch(erro => console.error)
@@ -324,7 +349,7 @@ class Questao extends Component {
                                                     {resposta.correta ? "Sim" : "Não"}
                                                 </TableCell>
                                                 <TableCell align="right">
-                                                    <IconButton aria-label="delete" onClick={() => this.excluirResposta(index)}>
+                                                    <IconButton aria-label="delete" onClick={() => this.excluirResposta(index, resposta.uuid)}>
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
                                                 </TableCell>
@@ -343,7 +368,11 @@ class Questao extends Component {
                                 onClick={this.voltar}>Voltar</Button>
                         </Grid>
                         <Grid item xs={1}>
-                            <Button variant="contained" color="primary" onClick={this.salvar}>Salvar</Button>
+                            <Button variant="contained" 
+                                    color="primary" 
+                                    onClick={this.state.uuid === null ? this.salvar : this.atualizar}>
+                                        {this.state.uuid === null ? "Salvar" : "Atualizar"}
+                                    </Button>
                         </Grid>
                     </Grid>
 
